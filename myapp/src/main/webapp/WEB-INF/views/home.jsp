@@ -25,8 +25,13 @@
 	<input type="checkbox" name="food" value="sand" /> 샌드위치
 	<input type="checkbox" name="food" value="spa" /> 스파게티 
 	<br />
+	<p>자격증</p>
+	자격이름 : <input type="text" name="licenseName" /> <br />
+	발급기관 : <input type="text" name="licenseOrg" /> <br />
+	발급일 : <input type="text" name="licenseDate" /> <br />
 	<input type="submit" value="전송" />
 </form>
+	
 	
 </body>
 </html>
