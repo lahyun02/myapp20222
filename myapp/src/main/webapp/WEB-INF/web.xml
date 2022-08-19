@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee                       http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+
+	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
+	
+	<!-- 1.리스너 :톰캣이 처음 실행될때 root-context.xml 스프링 설정 파일을 등록 -->
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- 2. 서블릿 : 디스패쳐서블릿(/)에 매핑됨 
+	- servlet-context.xml 스프링 설정파일을 등록 후 모든 요청을 디스패쳐서블릿이 실행함 -->
+	<!-- Processes application requests -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 정적파일(html,js나 이미지 등)은 디스패쳐가 실행하기 어려움 모든 요청을 처리할 경우 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+		<!-- /abc/*.do 또는 /abc/d.do 또는 /(디폴트) 등 사용가능 -->
+		<!-- 톰캣은 Servlet Container. 서블릿만 실행할 수 있다. 엄밀히 말하는 웹서버 웹애플리케이션, was가 아님 
+		톰캣에서 요청을 처리해주는 설정을 등록해놨기 때문 
+		톰캣 서버의 web.xml파일 안에 DefaultServlet, JspServlet이 등록되어 있음.
+		servlet-mapping 태그 안 default(/)나 jsp에 보면 연결된 확장자가 설정됨
+		default(/) -> 톰캣이 html파일 등 요청파일을 못찾았을 때 나머지 파일을 실행하는 파일 -->
+	</servlet-mapping>
+	
+	<filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern> 
+        <!-- 디스패쳐서블릿에도 모든 경로 설정했기 때문에 필터도 모든 경로에 적용되도록 -->
+    </filter-mapping>
+
+</web-app>
