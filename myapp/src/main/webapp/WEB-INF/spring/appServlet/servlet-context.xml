@@ -21,6 +21,8 @@
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- JSTL 메시지 관련 태그가 스프링의 메시지 소스를 사용하도록 지원해주는 JstlView 사용. InternalResourceView와 거의 같지만 jstl을 더 잘 지원해줌  -->
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>

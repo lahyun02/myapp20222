@@ -2,6 +2,7 @@ package com.exam.myapp;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -46,23 +47,33 @@ public class TestController {
 	@RequestMapping(path = "/test.do", method = RequestMethod.POST)  //경로만 지정하면 get, post 모두 실행됨 
 //	public String test(@RequestParam("x") int x, int y, Map map) { 
 //	public String test(int x, int y, Map map) { 
-	public String test(@ModelAttribute("testVo") TestVo vo, Map map) { 
+//	public String test(@ModelAttribute("testVo") TestVo vo, Map map) { 
+	public String test(TestVo vo, Map map) { 
 		//파라미터메서드이름과 동일한 매개변수 이름을 설정하면 바로 값을 받을수있음. 
 		//@RequestParam("x")의 이름과 변수명이 같으면 @RequestParam("x") 생략가능. 다르면 써줘야 함.
+		
 		System.out.println("TEST!");
+		
 		//if(vo.getFood() != null) 또는 TestVo에서 list에 초기값을 준다.
 		for (String f : vo.getFood()) {
 			System.out.println(f);
 		}
+		
 //		int sum = x + y;
 		int sum = vo.getX() + vo.getY();
+		
 		//매개변수 안에 Map map 또는 Model model 또는 ModelMap modelMap
 		map.put("result", sum);
 //		map.put("testVo", vo);
 //		model.addAttribute("result", sum); 
 //		modelMap.addAttribute("result", sum); 
 		
-		
+		// List 안에 있는 LicenseVo객체 - 자격증 정보 꺼내오기
+		for (LicenseVo lvo : vo.getLicense()) {
+			System.out.println( lvo.getLicenseName() );
+			System.out.println( lvo.getLicenseOrg() );
+			System.out.println( lvo.getLicenseDate() );
+		}
 		
 		return "test";
 	}
