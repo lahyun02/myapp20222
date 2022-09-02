@@ -1,8 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
+<!-- 다수의 DispatcherServlet을 등록하여 사용하는 경우, 모든 DispatcherServlet이 공유하여 사용할 객체들을 등록 -->
+<!-- 일반적으로 Service, Repository(DAO) 관련 객체들을 등록 -->
+	
+	<!-- 데이터베이스와의 연결을 제공하는 객체 등록 -->
+	<bean id="ds" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="web" />
+		<property name="password" value="web01" />
+	</bean>
+	
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="ds" />   <!-- ref: 객체를 참조, value: 문자열 등록 -->
+		<!-- MyBatis 전체 설정 파일 위치 지정 -->
+		<!-- <property name="configLocation" value="classpath:batis/mybatis-config.xml" /> -->
+		
+		<!-- mybatis-spring 1.3.0 버전 부터 MyBatis 설정파일의 내용을 스프링 설정파일에 설정 가능 -->
+		<property name="configuration">
+		    <bean class="org.apache.ibatis.session.Configuration">
+		      <property name="mapUnderscoreToCamelCase" value="true"/>
+		    </bean>
+		</property>
+		<!-- typeAliases에 등록한 클래스들은 MyBatis설정파일에서 패키지명을 제외한 클래스명(MemberVo)만으로 사용 가능 -->
+		<!-- ,를 사용하여 다수의 클래스 등록 가능 -->
+		<!-- <property name="typeAliases" value="com.exam.myapp.member.MemberVo" /> -->
+		<!-- 지정한 패키지 내부(하위)에 존재하는 모든 클래스들을 typeAliases 등록 
+		- 다른 패키지에 동일한 이름의 클래스가 존재하지 않도록 주의 필요(다른 이름으로 할 것)  -->
+		<property name="typeAliasesPackage" value="com.exam.myapp" />
+		<!-- MyBatis를 통해서 실행할 SQL문들이 정의된 XML파일의 경로 지정 -->
+		<property name="mapperLocations" value="classpath*:batis/mapper/**/*.xml" />
+		<!-- classpath* : 하나가 검색되더라도 모든 파일 탐색 -->
+	</bean>
+	
+	<!-- 설정한 패키지 아래의 모든 인터페이스를 찾아 그걸 구현한 실제 클래스를 만들어 구현해준다. -->
+	<mybatis-spring:scan base-package="com.exam.myapp" annotation="org.apache.ibatis.annotations.Mapper" />
+	
 		
 </beans>

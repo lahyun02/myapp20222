@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exam.myapp.member.MemberDao">
+  <select id="selectList" resultType="MemberVo">
+    select mem_id, mem_name, mem_point from member
+  </select>
+  <insert id="insert">
+  	insert into member 
+	(mem_id, mem_name, mem_pass, mem_point)
+	values 
+	(#{memId}, #{memName}, #{memPass}, #{memPoint})
+  </insert>
+</mapper>
