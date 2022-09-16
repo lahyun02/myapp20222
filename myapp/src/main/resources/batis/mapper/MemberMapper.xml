@@ -6,10 +6,28 @@
   <select id="selectList" resultType="MemberVo">
     select mem_id, mem_name, mem_point from member
   </select>
+  
+  <select id="select" resultType="MemberVo">
+    select mem_id, mem_name, mem_point from member
+    WHERE mem_id = #{memId}
+  </select>
+
   <insert id="insert">
   	insert into member 
 	(mem_id, mem_name, mem_pass, mem_point)
 	values 
 	(#{memId}, #{memName}, #{memPass}, #{memPoint})
   </insert>
+
+  <update id="update">
+  	UPDATE member
+  	SET mem_name = #{memName}, mem_point = #{memPoint}
+  	WHERE mem_id = #{memId}
+  </update>
+  
+  <delete id="delete">
+  	DELETE FROM member
+  	WHERE mem_id = #{memId}
+  </delete>
+  
 </mapper>

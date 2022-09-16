@@ -9,4 +9,6 @@ public class MemberVo {
 	private String memPass;
 	private String memName;
 	private int memPoint;
+	private int cnt;
+	
 }

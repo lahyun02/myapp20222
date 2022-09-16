@@ -29,7 +29,7 @@
 		<tbody>
 			<c:forEach var="vo" items="${memList}" >
 				<tr>
-					<td><c:out value="${vo.memId}" /></td>
+					<td><a href="${pageContext.request.contextPath}/member/edit.do?memId=${vo.memId}"><c:out value="${vo.memId}" /></a></td>
 					<td><c:out value="${vo.memName}" /></td>
 					<td>${vo.memPoint}</td> <%--int이기 때문에 보안상의 이유인 c:out을 굳이 쓰지 않았음--%>
 				</tr>

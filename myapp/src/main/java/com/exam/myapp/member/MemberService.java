@@ -8,5 +8,12 @@ public interface MemberService {
 	// 회원목록
 	public List<MemberVo> selectList();
 
-	public int insert(MemberVo vo); 
+	public int insert(MemberVo vo);
+
+	public MemberVo select(MemberVo vo);
+
+	public int update(MemberVo vo);
+
+	public int delete(MemberVo vo);
+
 }
