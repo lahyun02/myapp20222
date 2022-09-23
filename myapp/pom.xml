@@ -83,6 +83,15 @@
 		    <version>21.5.0.0</version>
 		</dependency>
 		
+		<!-- 스프링에서 객체 검증을 위한 라이브러리 --> 
+		<!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
+		<dependency>
+		    <groupId>org.hibernate.validator</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>6.2.5.Final</version>
+		</dependency>
+
+		
 		
 		<!-- Logging -->
 		<dependency>
