@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,40 +77,44 @@ $(function(){
 <body>
 <div class="container">
 <div class="row">
-    <div class="col">
+    <div class="col"> 
 	<h1>회원등록</h1>
-	<form id="memForm" action="${pageContext.request.contextPath}/member/add.do" method="post" > 
+	<form:form modelAttribute="memberVo" id="memForm" action="${pageContext.request.contextPath}/member/add.do" method="post" > 
 	  <div class=" mb-3">
-	    <label for="memId" class="form-label">아이디</label>
+	    <form:label path="memId" class="form-label">아이디</form:label>
 	    <div class="input-group">
-		    <input type="text" name="memId" class="form-control" id="memId">
+		    <form:input path="memId" class="form-control" cssErrorClass="form-control is-invalid" />
 		    <button type="button" id="dupBtn" class="btn btn-outline-secondary">중복확인</button>
+			<!-- 컨트롤러에서 검증 결과, 모델 객체의 memId 속성값과 관련된 오류가 있는 경우, 오류 메시지 출력  -->
+		    <form:errors path="memId"  cssClass="invalid-feedback" />
 	    </div>
 	  </div>
 	  <div class="mb-3">
-	    <label for="memPass" class="form-label">비밀번호</label>
-	    <input type="password" name="memPass" class="form-control" id="memPass">
+	    <form:label path="memPass" class="form-label">비밀번호</form:label>
+	    <form:password path="memPass" class="form-control" cssErrorClass="form-control is-invalid" />
+	    <form:errors path="memPass" cssClass="invalid-feedback" />
 	  </div>
 	  <div class="mb-3">
-	  	<%-- 비밀번호 확인은 굳이 서버에서 막지 않고 js로 함. --%>
+	  	<%-- 비밀번호 확인은 굳이 서버에서 막지 않고 js로 함. 비밀번호 확인은 전송하는 게 아니라 form:x .  --%>
 	    <label for="memPassCheck" class="form-label">비밀번호확인</label>
-	    <input type="password" class="form-control" id="memPassCheck">
+	    <input type="password" class="form-control" id="memPassCheck" />
 	  </div>
 	  <div class="mb-3">
-	    <label for="memName" class="form-label">이름</label>
-	    <input type="text" name="memName" class="form-control" id="memName">
+	    <form:label path="memName" class="form-label">이름</form:label>
+	    <form:input path="memName" class="form-control" cssErrorClass="form-control is-invalid"/>
+	    <form:errors path="memName"  cssClass="invalid-feedback" />
 	  </div>
 	  <div class="mb-3">
-	    <label for="memPoint" class="form-label">포인트</label>
-	    <input type="text" name="memPoint" class="form-control" id="memPoint">
+	    <form:label path="memPoint" class="form-label">포인트</form:label>
+	    <form:input type="number" path="memPoint" class="form-control" cssErrorClass="form-control is-invalid"/>
+	    <form:errors path="memPoint"  cssClass="invalid-feedback" />
 	  </div>
 	  <button type="submit" id="saveBtn" class="btn btn-primary"><i class="bi bi-save"></i> 저장</button>
 	 	<a href="${pageContext.request.contextPath}/member/list.do">
 			<button type="button" class="btn btn-outline-warning"><i class="bi bi-filter-square"></i> 회원목록</button>
 		</a>
-	</form>
+	</form:form>
 	
-<%-- 	<form:form></form> --%>
 	
 	</div>
 </div>

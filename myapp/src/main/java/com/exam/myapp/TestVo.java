@@ -15,6 +15,8 @@ import lombok.Setter;
 public class TestVo {
 	private int x;
 	private int y;
-	private List<String> food = new ArrayList<String>();  //String[]
+	private String lunch;		//점심에 먹을 음식 선택할 것 저장
+	private String dinner;		//저녁에 먹을 음식 선택한 것 저장
+	private List<String> food = new ArrayList<String>();  //String[]. 다중선택-좋아하는 음식 저장
 	private List<LicenseVo> license; //자격증객체를 여러개 저장할 수 있도록
 }

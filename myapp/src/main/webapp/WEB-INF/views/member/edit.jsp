@@ -12,6 +12,7 @@
 <link href="${pageContext.request.contextPath}/css/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" >
 <script src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script> 
 <title>회원관리</title>
+
 <script type="text/javascript">
 //	삭제링크 클릭시, 삭제여부를 묻는 창을 출력하고, 삭제하겠다고 선택하는 경우에만 삭제하도록 구현
 // 	alert('') //출력만

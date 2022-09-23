@@ -30,6 +30,12 @@
 	<!-- Controller를 포함해 약속된 애노테이션이 있는 클래스를 등록하는 곳 : 베이스패키지 아래면 ok -->
 	<context:component-scan base-package="com.exam.myapp" />
 	
-	
+	<!-- MessageSource 객체를 "messageSource"라는 이름으로 스프링에 등록하면, 해당 MessageSource 객체의 메시지들이 스프링에 등록되어 사용 가능 -->
+	<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<!-- 클래스패스 기준으로 메시지를 정의한 프로퍼티파일의 경로를 확장자(.properties) 제외하고 지정 - MessageSource객체가 담고 있는 내용 확인 가능 -->
+		<!-- messages_en.properties, messages_ko.properties 처럼 국가 및 언어 코드를 접미어로 붙인 파일들을 사용하면,  -->
+		<!-- 로케일에 따라서 다른 언어의 메시지들이 자동으로 사용되도록 설정 가능 (국제화) -->
+		<beans:property name="basename" value="messages" />
+	</beans:bean>
 	
 </beans:beans>
