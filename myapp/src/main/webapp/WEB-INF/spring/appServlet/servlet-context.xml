@@ -6,7 +6,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
-
+	
+	<!-- 	화면출력, controller쪽 관련 설정하는 곳  -->
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
@@ -18,14 +19,34 @@
 	그 요청을 처리할 디폴트서블릿핸들러를 등록 
 	(디폴트서블릿핸들러는 요청 처리를 서버(톰캣)의 DefaultServlet에게 위임)	-->
 	<default-servlet-handler/>
+	
 
+	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- JSTL 메시지 관련 태그가 스프링의 메시지 소스를 사용하도록 지원해주는 JstlView 사용. InternalResourceView와 거의 같지만 jstl을 더 잘 지원해줌  -->
 		<beans:property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="2" /> 
 	</beans:bean>
+	<!-- 컨트롤러가 문자열(뷰이름)을 반환했을 때, TilesViewResolver가 먼저 뷰이름을 처리하고,  -->
+	<!-- TilesViewResolver가 처리할 수 없는 경우 InternalResourceViewResolver가 처리하도록 order 속성을 설정  -->
+	<!-- ViewResolver가 두개 등록되어있기 때문에 스프링이 처리할 순서를 설정 -->
+	<!-- titles 버전이 3이라서 3버전의 클래스 등록 -->
+	<beans:bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+		<beans:property name="order" value="1" /> 
+	</beans:bean>
+	<!-- Tiles 설정 정보 등록 (설정 파일 위치 지정) -->
+	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+	   <beans:property name="definitions">
+	     <beans:list>
+	       <beans:value>/WEB-INF/views/tiles/tiles.xml</beans:value>
+			<!-- 해당파일: 사용자에서 보여줄 화면을 어떻게 정의하는지 설정. webapp아래쪽이면 위치는 상관x. 클래스패스접두어만 붙이면 resources에 붙여도 상관x -->
+	     </beans:list>
+	   </beans:property>
+	 </beans:bean>
+	
 	
 	<!-- Controller를 포함해 약속된 애노테이션이 있는 클래스를 등록하는 곳 : 베이스패키지 아래면 ok -->
 	<context:component-scan base-package="com.exam.myapp" />

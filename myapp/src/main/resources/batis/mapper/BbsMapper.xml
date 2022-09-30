@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exam.myapp.bbs.BbsDao">
+  <select id="selectList" resultType="BbsVo">
+    SELECT BBS_NO, BBS_TITLE, BBS_WRITER, BBS_REG_DATE, BBS_COUNT
+	FROM BBS
+  </select>
+  
+  <select id="select" resultType="BbsVo">
+	SELECT BBS_NO, BBS_TITLE, BBS_CONTENT, BBS_WRITER, BBS_REG_DATE, BBS_COUNT
+	FROM BBS
+	WHERE BBS_NO = #{bbsNo}
+  </select>
+
+  <insert id="insert">
+  	INSERT INTO BBS
+	    (BBS_NO, 
+	    BBS_TITLE, 
+	    BBS_CONTENT, 
+	    BBS_WRITER, 
+	    BBS_REG_DATE, 
+	    BBS_COUNT)
+	VALUES
+	    (BBS_SEQ.NEXTVAL, 
+	    #{bbsTitle}, 
+	    #{bbsContent}, 
+	    #{bbsWriter}, 
+	    sysdate, 
+	    0)
+  </insert>
+
+  <update id="update">
+  	UPDATE BBS
+	SET
+	    BBS_TITLE = #{bbsTitle}, 
+	    BBS_CONTENT = #{bbsContent}
+	WHERE BBS_NO = #{bbsNo}
+  </update>
+  
+  <delete id="delete">
+  	DELETE FROM BBS
+	WHERE BBS_NO = #{bbsNo}
+  </delete>
+  
+</mapper>

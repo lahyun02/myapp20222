@@ -28,7 +28,7 @@ $(function(){
 	
 	$('#dupBtn').on('click', function(){
 		$.ajax({  //요청보내기
-			  url: "${pageContext.request.contextPath}/member/duplicate.do",  //요청주소
+			  url: "${pageContext.request.contextPath}/bbs/duplicate.do",  //요청주소
 			  method: "post",	//요청방식
 			  data: { memId : $('#memId').val() }, //파라미터 붙여서 보내기
 			  dataType: "json"   //결과는 json으로 받기
@@ -58,50 +58,26 @@ $(function(){
 // 		$('#dupBtn').prop('disabled', false);  
 	});
 	
-	
-	
-	
-	
 });
 </script>
 
 <div class="row">
     <div class="col"> 
-	<h1>회원등록</h1>
-	<form:form modelAttribute="memberVo" id="memForm" action="${pageContext.request.contextPath}/member/add.do" method="post" > 
-	  <div class=" mb-3">
-	    <form:label path="memId" class="form-label">아이디</form:label>
-	    <div class="input-group">
-		    <form:input path="memId" class="form-control" cssErrorClass="form-control is-invalid" />
-		    <button type="button" id="dupBtn" class="btn btn-outline-secondary">중복확인</button>
-			<!-- 컨트롤러에서 검증 결과, 모델 객체의 memId 속성값과 관련된 오류가 있는 경우, 오류 메시지 출력  -->
-		    <form:errors path="memId"  cssClass="invalid-feedback" />
-			<!-- 필드 memId에 오류가 있으면 부트스트랩이용해 오류 메시지 출력하기. path: 필드명 | value= ${memberVo.memId} 처럼 값을 출력해준다. -->
-	    </div>
+	<h1>게시글등록</h1>
+	<form:form modelAttribute="bbsVo" id="memForm" action="${pageContext.request.contextPath}/bbs/add.do" method="post" > 
+	  <div class="mb-3">
+	    <form:label path="bbsTitle" class="form-label">제목</form:label>
+	    <form:input path="bbsTitle" class="form-control" cssErrorClass="form-control is-invalid"/>
+	    <form:errors path="bbsTitle"  cssClass="invalid-feedback" />
 	  </div>
 	  <div class="mb-3">
-	    <form:label path="memPass" class="form-label">비밀번호</form:label>
-	    <form:password path="memPass" class="form-control" cssErrorClass="form-control is-invalid" />
-	    <form:errors path="memPass" cssClass="invalid-feedback" />
-	  </div>
-	  <div class="mb-3">
-	  	<%-- 비밀번호 확인은 굳이 서버에서 막지 않고 js로 함. 비밀번호 확인은 전송하는 게 아니라 form:x .  --%>
-	    <label for="memPassCheck" class="form-label">비밀번호확인</label>
-	    <input type="password" class="form-control" id="memPassCheck" />
-	  </div>
-	  <div class="mb-3">
-	    <form:label path="memName" class="form-label">이름</form:label>
-	    <form:input path="memName" class="form-control" cssErrorClass="form-control is-invalid"/>
-	    <form:errors path="memName"  cssClass="invalid-feedback" />
-	  </div>
-	  <div class="mb-3">
-	    <form:label path="memPoint" class="form-label">포인트</form:label>
-	    <form:input type="number" path="memPoint" class="form-control" cssErrorClass="form-control is-invalid"/>
-	    <form:errors path="memPoint"  cssClass="invalid-feedback" />
+	    <form:label path="bbsContent" class="form-label">내용</form:label>
+	    <form:textarea path="bbsContent" rows="5" class="form-control" cssErrorClass="form-control is-invalid"/>
+	    <form:errors path="bbsContent"  cssClass="invalid-feedback" />
 	  </div>
 	  <button type="submit" id="saveBtn" class="btn btn-primary"><i class="bi bi-save"></i> 저장</button>
-	 	<a href="${pageContext.request.contextPath}/member/list.do">
-			<button type="button" class="btn btn-outline-warning"><i class="bi bi-filter-square"></i> 회원목록</button>
+	 	<a href="${pageContext.request.contextPath}/bbs/list.do">
+			<button type="button" class="btn btn-outline-warning"><i class="bi bi-filter-square"></i> 목록</button>
 		</a>
 	</form:form>
 	

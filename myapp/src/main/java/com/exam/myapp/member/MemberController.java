@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -42,6 +43,9 @@ public class MemberController {
 		//스프링 form태그를 쓰면 MemberVo객체와 연결시키기 때문에 매개변수로써 필요함(없으면 에러) 
 		//1. 주소창에 쳐서 get방식으로 add.do요청이 가면 이 메소드가 실행된다. 
 		//2. add.jsp에서 form:태그를 MemberVo객체와 연결지어 사용하겠다고 하는데 MemberVo객체가 없으면 에러가 난다..!
+		
+		// @ModelAttribute("memberVO") MemberVo vo에서 @ModelAttribute("memberVO")를 생략하면, 타입 MemberVo에서 첫글자만 소문자로 자동변환 생성
+		//-> 스프링 form태그 모델명 이름 이유
 		return "member/add";
 	}
 	
@@ -69,7 +73,16 @@ public class MemberController {
 	}
 	
 	@RequestMapping(path = "edit.do", method = RequestMethod.POST)  
-	public String edit(MemberVo vo) {
+	public String edit(@ModelAttribute("memVo") @Valid MemberVo vo, BindingResult bindingResult) {
+		//오류가 있으면 return "member/edit"; 검증을 추가했기 때문에 위 editform메서드에서 모델객체에 저장한 mvo와 vo의 이름이 다르기 때문에 모델명 이름을 맞춰줘야한다. 
+		if(bindingResult.hasFieldErrors("memName") || bindingResult.hasFieldErrors("memPoint")) {
+			//특정필드에 오류가 있는지 검사 - 회원정보 변경시에는 이름과 포인트만 검증
+			return "member/edit";
+			
+			// if(bindingResult.hasErrors()) 일 경우 MemboerVo에 검증 지정한 거 모두다 검증하지만,  
+			// 회원정보 변경 페이지에서 비밀번호는 검사 안하게 만들어놨기 때문에 MemboerVo에서 비밀번호 검증 오류가 됨. (null이나 빈문자열)
+		}
+		
 		int num = memberService.update(vo);
 		return "redirect:/member/list.do";
 	}
