@@ -59,4 +59,23 @@
 		<beans:property name="basename" value="messages" />
 	</beans:bean>
 	
+	<interceptors>
+		<interceptor>
+			<mapping path="/**"/> <!-- 모든 경로의 요청에 대해 LoginInterceptor가 실행하도록. 슬래쉬/가 붙어도 다 갈 수 있도록 (/*/*/*)  -->
+			<!-- 로그인 안한 상태에서도 로그인과 회원가입 화면에 접근할 수 있도록 제외할 경로 추가하기  -->
+			<exclude-mapping path="/member/login.do"/>
+			<exclude-mapping path="/member/add.do"/>
+			<exclude-mapping path="/member/duplicate.do"/> <!-- 아이디 중복확인도 제외경로에 추가 -->
+			<beans:bean class="com.exam.myapp.member.LoginInterceptor" />
+			
+		</interceptor>
+	</interceptors>
+	
+	<!-- 이름이 중요 - multipartResolver라고 해야 스프링이 이 이름으로 등록된 객체를 찾아서 multipart data를 처리할 수 있음 -->
+	<!-- 파일이 포함된 폼 데이터 처리를 담당하는 객체를 multipartResolver 라는 이름으로 등록 -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
+		
+	</beans:bean>
+	
+	
 </beans:beans>

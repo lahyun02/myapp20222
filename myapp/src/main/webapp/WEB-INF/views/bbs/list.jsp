@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 
 <div class="row">
     <div class="col">
@@ -17,7 +18,7 @@
 					<tr>
 						<td><a href="${pageContext.request.contextPath}/bbs/edit.do?bbsNo=${vo.bbsNo}"><c:out value="${vo.bbsTitle}" /></a></td>
 						<td><c:out value="${vo.bbsWriter}" /></td>
-						<td>${vo.bbsRegDate}</td> 
+						<td><fmt:formatDate value="${vo.bbsRegDate}" pattern="yyyy년 MM월 dd일 HH:mm:ss" /> </td>  
 					</tr>
 				</c:forEach>
 			</tbody>

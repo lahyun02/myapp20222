@@ -52,6 +52,10 @@
 	    <form:textarea path="bbsContent" rows="5" class="form-control" cssErrorClass="form-control is-invalid"/>
 	    <form:errors path="bbsContent"  cssClass="invalid-feedback" />
 	  </div>
+	  <div class="mb-3">
+	    <form:label path="bbsWriter" class="form-label">작성자</form:label>
+	    <form:input path="bbsWriter" readonly="true" class="form-control" />
+	  </div>
 	  <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> 저장</button>
 	 	<a href="${pageContext.request.contextPath}/bbs/list.do">
 			<button type="button" class="btn btn-outline-warning"><i class="bi bi-filter-square"></i> 목록</button>

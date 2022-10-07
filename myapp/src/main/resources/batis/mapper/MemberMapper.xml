@@ -12,6 +12,11 @@
     WHERE mem_id = #{memId}
   </select>
 
+  <select id="selectLogin" resultType="MemberVo">
+    select mem_id, mem_name, mem_point from member
+    WHERE mem_id = #{memId} and mem_pass = #{memPass}
+  </select>
+
   <insert id="insert">
   	insert into member 
 	(mem_id, mem_name, mem_pass, mem_point)

@@ -15,5 +15,8 @@ public interface MemberService {
 	public int update(MemberVo vo);
 
 	public int delete(MemberVo vo);
+	
+	//로그인
+	public MemberVo selectLogin(MemberVo vo);
 
 }

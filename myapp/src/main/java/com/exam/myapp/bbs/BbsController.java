@@ -1,9 +1,11 @@
 package com.exam.myapp.bbs;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.InternalResourceView;
 import org.springframework.web.servlet.view.JstlView;
+
+import com.exam.myapp.member.MemberVo;
 
 // 브라우저에서 
 // http://localhost:8000/myapp/bbs/list.do 로 요청을 보내면, 
@@ -44,10 +50,17 @@ public class BbsController {
 	}
 	
 	@RequestMapping(path = "add.do", method = RequestMethod.POST)  
-	public String add(@Valid BbsVo vo, BindingResult bindingResult) {  
+	public String add(@Valid BbsVo vo, BindingResult bindingResult, HttpSession session) {  
+//		public String add(@Valid BbsVo vo, BindingResult bindingResult, HttpSession session, @SessionAttribute("loginUser") MemberVo mvo) {  
+		// 스프링 4.3버전 이후 -> @SessionAttribute("loginUser") MemberVo mvo 이렇게 파라미터 안에서 작성 가능
 //		if(bindingResult.hasErrors()) {  //검증결과 에러가 있다면
 //			return "bbs/add"; //회원추가 jsp 화면을 다시 출력 
 //		}
+		
+		//세션을 받은 후(파라미터), 세션에 저장되어있던 로그인한 사람의 아이디를 세션에서 가져와 작성자의 아이디로 저장
+		MemberVo mvo = (MemberVo) session.getAttribute("loginUser");
+		vo.setBbsWriter( mvo.getMemId() );
+		
 		int num = bbsService.insert(vo);
 		return "redirect:/bbs/list.do";
 	}

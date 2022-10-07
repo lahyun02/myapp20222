@@ -33,6 +33,12 @@ public class MemberServiceImpl implements MemberService {
 	public int delete(MemberVo vo) {
 		return memberDao.delete(vo);
 	}
+	
+	//로그인
+	@Override
+	public MemberVo selectLogin(MemberVo vo) {
+		return memberDao.selectLogin(vo);
+	}
 
 
 }

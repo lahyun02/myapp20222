@@ -163,6 +163,15 @@
 			<version>1.2</version>
 		</dependency>
 		
+		<!-- 파일업로드를 위한 CommonsMultipartResolver 사용에 필요한 라이브러리 - 아파치Apache commons-fileupload -->
+		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.4</version>
+		</dependency>
+
+		
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>

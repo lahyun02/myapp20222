@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,6 +136,40 @@ public class MemberController {
 //		} else 
 //			//return "fail";
 		return null;
+	}
+	
+	@RequestMapping(path = "login.do", method = RequestMethod.GET)
+	public String loginForm() {
+		return "member/login";
+	}
+	
+	@RequestMapping(path = "login.do", method = RequestMethod.POST)
+	public String login(MemberVo vo, HttpSession session) {
+		
+		MemberVo memberVo = memberService.selectLogin(vo);
+		
+		if(memberVo == null) { //로그인 실패
+			System.out.println("로그인실패");
+			return "member/login";
+		}
+		//로그인 성공
+		//로그인시, 사람마다 하나씩 갖고 있는 세션에 저장시킨다. 나중에 필요한 곳에서 loginUser라고 저장된 세션을 꺼내면 memberVo 데이터를 쓸 수 있다. 
+		System.out.println("로그인 성공");
+		session.setAttribute("loginUser", memberVo);
+		
+		return "redirect:/member/list.do";
+	}
+	
+	@RequestMapping(path = "logout.do", method = RequestMethod.GET)
+	public String logout(HttpSession session) {
+		// 현재 세션에 기록되어 있는 정보를 지우는 것이기 떄문에 파라미터에 MemberVo객체는 필요없으므로 지우고, 세션객체는 지워야하기 때문에 파라미터에 세센을 넣는다.
+		// 로그아웃 -> 세션에서  loginUser 이름으로 저장되어 있는 객체를 꺼냈을 때 아무것도 없어야 함.
+		// 세션 지우기 3가지 방법 
+//		session.setAttribute("loginUser", null); // 1. "loginUser"이름으로 저장되어있는 객체에 null 삽입
+//		session.removeAttribute("loginUser"); // 2. "loginUser"이름으로 저장되어있는 객체를 없앤다. (메서드)
+		session.invalidate(); // 3. 세션 객체 자체를 지운다. 세션에 저장되어 있는 loginUser뿐만 아니라, 세션 자체를 다 지워버림. 초기화 
+		// - (유효하지 않은 세션이다라고 할 경우 톰캣이 세션을 다 지워버림. 그리고 새로 세션을 만든다.)
+		return "redirect:/member/login.do";
 	}
 	
 	
