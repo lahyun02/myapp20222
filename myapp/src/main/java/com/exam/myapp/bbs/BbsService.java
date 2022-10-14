@@ -1,7 +1,10 @@
 package com.exam.myapp.bbs;
 
+import java.io.File;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+
+import com.exam.myapp.attach.AttachVo;
 
 
 public interface BbsService {
@@ -15,5 +18,9 @@ public interface BbsService {
 	public int update(BbsVo vo);
 
 	public int delete(BbsVo vo);
+
+	public AttachVo selectAttach(AttachVo vo);
+
+	public File getAttachFile(AttachVo vo);  
 
 }

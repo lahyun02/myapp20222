@@ -11,7 +11,7 @@ public interface AttachDao {
 
 	public int insert(AttachVo vo);
 
-//	public AttachVo select(AttachVo vo);
+	public AttachVo select(AttachVo vo);
 
 //	public int update(AttachVo vo);
 

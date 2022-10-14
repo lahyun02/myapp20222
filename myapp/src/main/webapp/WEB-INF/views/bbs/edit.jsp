@@ -56,6 +56,15 @@
 	    <form:label path="bbsWriter" class="form-label">작성자</form:label>
 	    <form:input path="bbsWriter" readonly="true" class="form-control" />
 	  </div>
+	  <div class="mb-3">
+	  	<c:forEach var="avo" items="${bbsVo.attList}">  
+		  	<div>
+		  		<a href="${pageContext.request.contextPath}/bbs/down.do?attNo=${avo.attNo}">
+		  		 	<c:out value="${avo.attOrgName}" /> 
+		  		 </a>
+		  	</div>
+	  	</c:forEach>
+	  </div>
 	  <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> 저장</button>
 	 	<a href="${pageContext.request.contextPath}/bbs/list.do">
 			<button type="button" class="btn btn-outline-warning"><i class="bi bi-filter-square"></i> 목록</button>

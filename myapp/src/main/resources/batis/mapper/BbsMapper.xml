@@ -8,10 +8,26 @@
 	FROM BBS
   </select>
   
-  <select id="select" resultType="BbsVo">
-	SELECT BBS_NO, BBS_TITLE, BBS_CONTENT, BBS_WRITER, BBS_REG_DATE, BBS_COUNT
-	FROM BBS
-	WHERE BBS_NO = #{bbsNo}
+  <resultMap type="BbsVo" id="BbsMap">
+  	<id property="bbsNo" column="BBS_NO" />
+	<result property="bbsTitle" column="BBS_TITLE" />
+	<result property="bbsContent" column="BBS_CONTENT" />
+	<result property="bbsWriter" column="BBS_WRITER" />
+	<result property="bbsRegDate" column="BBS_REG_DATE" />
+	<result property="bbsCount" column="BBS_COUNT" />
+	<collection property="attList" ofType="AttachVo">
+		<id property="attNo" column="ATT_NO" />
+		<result property="attOrgName" column="ATT_ORG_NAME" />
+		<result property="attNewName" column="ATT_NEW_NAME" />
+		<result property="attBbsNo" column="ATT_BBS_NO" />
+	</collection>
+  </resultMap>
+  
+  <select id="select" resultMap="BbsMap"> 
+	SELECT B.BBS_NO, B.BBS_TITLE, B.BBS_CONTENT, B.BBS_WRITER, B.BBS_REG_DATE, B.BBS_COUNT
+		, A.ATT_NO, A.ATT_ORG_NAME, A.ATT_NEW_NAME, A.ATT_BBS_NO
+	FROM BBS B LEFT OUTER JOIN ATTACH A ON B.BBS_NO = A.ATT_BBS_NO
+	WHERE B.BBS_NO = #{bbsNo}
   </select>
 
   <insert id="insert">

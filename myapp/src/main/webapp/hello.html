@@ -3,8 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <title>Hello</title>
+<script type="text/javascript">
+// 	링크변경 버튼을 클릭하면, 화면에 있는 모든 링크의 주소를 https://spring.io/로 변경
+
+//문서로드 완료시 실행할 함수 설정
+	//(1)문서에 포함된 외부 리소스들까지 로드가 완료된 후 -만약 이미지가 있따면 이미지까지 서버에서 받아온 후에 실행
+//	window.onload = function() {  }; 
+	
+	//(2)문서에 포함된 외부 리소스들의 로드와 상관없이 문서 구조(DOM TREE)를 완성한 후 
+//	window.addEventListener('DOMContentLoaded', function(e) {  });
+	//문서구조만 로드한 뒤 실행
+	
+	// a.memId 
+	// a[memId] -> memId는 변수를 호출, 
+	// a['mem Id'] -> 'mem Id'를 호출 
+	
+	function myQuery(selector){
+		var obj = {};  // {} 여기에서 객체가 만들어짐. 
+		obj.elementList = document.querySelectorAll(selector);
+		obj.attr = function (attrName, attrValue) {
+			for(var i=0; i < this.elementList.length; i++ ) {
+				var elm = this.elementList[i];
+				elm[attrName] = attrValue;
+			}
+		}
+		return obj;
+	}
+	
+	//위의 myQuery와 같음 
+	function myQuery2(selector){
+	var obj = {
+		elementList : document.querySelectorAll(selector),
+		attr : function (attrName, attrValue) {
+			for(var i=0; i < this.elementList.length; i++ ) {
+				var elm = this.elementList[i];
+				elm[attrName] = attrValue;
+			}
+		}
+	}
+	}
+	
+	var $ = myQuery;
+	
+	window.addEventListener('DOMContentLoaded', function(e) {  
+		var btnElm = document.getElementById("btn");  //window 생략 가능. 찾다찾다 못찾으면 window에서 찾음. 
+		console.log(btnElm);
+		btnElm.onclick = function() {  //onclick -> property
+//			myQuery('a').attr('href', 'https://spring.io/');
+			$('a').attr('href', 'https://spring.io/');
+			
+// 			var linkList = document.getElementsByTagName("a");  //엘리먼트를 담고 있는 배열 같은 것.
+// 			for(var i=0; i < linkList.length; i++ ) {
+// 				var link = linkList[i];
+// //				link.href = 'https://spring.io/';
+// 				link.setAttribute("href", "https://spring.io/"); 
+// 			}
+		};
+	});
+	
+	//1. 문서에 엘리먼트(DOM객체)를 찾기
+	//2. 문서에 없는 엘리먼트(DOM객체)를 생성
+	
+	// 엘리먼트의 속성값을 읽거나 변경 
+	// 엘리먼트의 내용을 읽거나 변경 
+	
+
+	// var a = document.getElementsByTagName(a); 
+	
+	//표준메서드
+	// btnElm.addEventListener("click", function(e) {
+	// 	alert("hello");
+	// 	console.log(a);
+	// });
+
+
+</script>
 </head>
 <body>
 	<h1>HELLO HTML</h1>
+	<a href="https://google.com">구글</a>
+	<a href="https://naver.com">네이버</a>
+	<a href="https://daum.net">다음</a>
+	<button type="button" id="btn">링크변경</button>
+	<!-- type="button" id="btn"는 attribute -->
 </body>
 </html>

@@ -48,8 +48,15 @@
 	 </beans:bean>
 	
 	
-	<!-- Controller를 포함해 약속된 애노테이션이 있는 클래스를 등록하는 곳 : 베이스패키지 아래면 ok -->
-	<context:component-scan base-package="com.exam.myapp" />
+	<!-- Controller를 포함해 약속된 애노테이션이 있는 클래스를 등록하는 곳 : 베이스패키지 아래면 ok :<context:component-scan> -->
+	
+	<!-- <context:component-scan> 분리 : @Controller만 등록하기 -->
+	<!-- use-default-filters : @Component, @Controller, @Service, @Repository가 붙은 클래스를 자동등록하는 필터 사용여부  -->
+	<!-- use-default-filters 속성을 false로 설정하여, @Component, @Controller, @Service, @Repository가 붙은 클래스를 자동등록하는 기능을 해제 -->
+	<context:component-scan base-package="com.exam.myapp" use-default-filters="false">
+		<!-- @Controller가 붙은 클래스는 스프링에 등록 -->
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
 	
 	<!-- MessageSource 객체를 "messageSource"라는 이름으로 스프링에 등록하면, 해당 MessageSource 객체의 메시지들이 스프링에 등록되어 사용 가능 -->
 	<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -66,6 +73,8 @@
 			<exclude-mapping path="/member/login.do"/>
 			<exclude-mapping path="/member/add.do"/>
 			<exclude-mapping path="/member/duplicate.do"/> <!-- 아이디 중복확인도 제외경로에 추가 -->
+			<exclude-mapping path="/css/**"/>
+			<exclude-mapping path="/js/**"/>
 			<beans:bean class="com.exam.myapp.member.LoginInterceptor" />
 			
 		</interceptor>

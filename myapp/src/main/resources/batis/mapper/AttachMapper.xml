@@ -13,7 +13,6 @@
 	SELECT att_no, att_org_name, att_new_name, att_bbs_no
 	FROM attach
 	WHERE att_no = #{attNo}
-
   </select>
 
   <insert id="insert">
