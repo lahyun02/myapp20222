@@ -21,24 +21,23 @@
         </tbody>
     </table>
     <form id="memForm">
-        아이디 : <input type="text" name="memId" /><br/>
-        비밀번호 : <input type="password" name="memPass" /><br/>
-        이름 : <input type="text" name="memName"/><br/>
-        포인트 : <input type="number" name="memPoint"/><br/>
+        아이디 : <input type="text" id="memId" name="memId" /><br/>
+        비밀번호 : <input type="password" id="memPass" name="memPass" /><br/>
+        이름 : <input type="text" id="memName" name="memName"/><br/>
+        포인트 : <input type="number" id="memPoint" name="memPoint"/><br/>
         <input type="button" value="저장" id="saveBtn"/> 
         <input type="button" value="삭제" id="delBtn"/> 
+        <input type="button" value="초기화" id="resetBtn"/> 
     </form>
     <script>
-        //memList안에는 회원정보가 여러개 들어있는 배열이다.
+        //memList는 안에 회원정보가 여러개 들어있는 배열이다.
         var memList = [
-            //객체에 한명의 회원정보를 담는다.
+            //각 객체에 한명의 회원정보를 담는다.
             { memId: 'a001', memPass: '1234', memName: '고길동', memPoint: 80 } 
             ,{ memId: 'a002', memPass: '5678', memName: '보노보노', memPoint: 95 } 
             ,{ memId: 'a003', memPass: '2345', memName: '포로리', memPoint: 90 } 
         ];
         //1. memList에 존재하는 회원목록을 table(의 tbody)에 출력
-
-        
         //2. form에 회원정보를 입력하고 저장버튼을 클릭하면, 입력한 회원정보를 memList에 추가하고,
         //   memList에 존재하는 회원목록을 table(의 tbody)에 출력
         //3. 테이블에서 상세버튼을 클릭하면,
@@ -48,20 +47,149 @@
         //   (2)삭제버튼을 클릭하면, 해당 회원정보를 memList에서 삭제하고,
         //      memList에 존재하는 회원목록을 table(의 tbody)에 출력
 
+        //1. memList에 존재하는 회원목록을 table(의 tbody)에 출력
         var tbodyElm = document.getElementById('memTable');
-        var tableRow = document.getElementById('memTable>tr');
-        // var newTr = memTable.createElement('tr');
+
+        // 왜 밑에처럼 그냥 하면 안되는 거지...?
+        // var fst = document.getElementById('fst');
+        // document.tbodyElm.removeChild(fst);
+
+        removeAllchild(tbodyElm);
+        function removeAllchild(elm) {
+            while (elm.hasChildNodes()) {
+                elm.removeChild(elm.firstChild);
+            }
+        }
+
+        showList();
+    function showList() {
         memList.forEach(elm => {
             // newTr.appendChild( elm[memId] );
             console.log(elm);
             console.log(elm.memId, elm.memName);
             //var newTr = '<tr><td>'+elm.memId+'</td><td>'+elm.memName+'</td><td><button type="button" class="editBtn">상세보기</button></td></tr>';
             //tbodyElm.innerHTML += newTr; //이경우 항상 추가만 되는데, 변경될 경우 생각해야.
-            // 문자열보단, createElement()나 제이쿼리의 element생성하는걸 써서 구현하는 게 더 좋음.
             //memTable.appendChild(newTr);
             //tbodyElm.innerHTML = tbodyElm.innerHTML + newTr;
-        });
+            // 문자열보단, createElement()나 제이쿼리의 element생성하는걸 써서 구현하는 게 더 좋음.
+            //memOne(elm);
 
+            var newTr = document.createElement('tr');
+            tbodyElm.appendChild(newTr);
+            var newTdId = document.createElement('td');
+            newTdId.innerHTML = elm.memId;
+            newTr.appendChild(newTdId);
+            var newTdName = document.createElement('td');
+            newTdName.innerHTML = elm.memName;
+            newTr.appendChild(newTdName);
+            var newTdBtn = document.createElement('td');
+            newTdBtn.innerHTML = '<button type="button" class="editBtn" data-memid="'+ elm.memId +'">상세보기</button>';
+            newTr.appendChild(newTdBtn);
+        });
+    }
+    
+        //2. form에 회원정보를 입력하고 저장버튼을 클릭하면, 입력한 회원정보를 memList에 추가하고,
+        //   memList에 존재하는 회원목록을 table(의 tbody)에 출력
+        var saveBtn = document.getElementById('saveBtn');
+        var form = document.getElementById('memForm');
+        var inpId = document.getElementById('memId');
+        var inpName = document.getElementById('memName');
+        var inpPass = document.getElementById('memPass');
+        var inpPoint = document.getElementById('memPoint');
+        saveBtn.onclick = function(e) {
+            console.log(inpId.value);
+            console.log(inpName.value);
+            console.log(inpPass.value);
+            console.log(inpPoint.value);
+            var checked = false;
+            // 기존 멤버리스트에 있으면 수정하기 
+            memList.forEach(elm => {
+                if(elm.memId === inpId.value) {
+                    alert(elm.memId);
+                    checked = true;
+                    elm.memId = inpId.value;
+                    elm.memName = inpName.value;
+                    elm.memPass = inpPass.value;
+                    elm.memPoint = inpPoint.value;
+                };
+            });
+            if(checked === false) {
+                // 기존 멤버리스트에 없으면 새 객체 생성해서 리스트에 추가하기
+                var newMem = { 
+                    memId: inpId.value
+                    , memPass: inpPass.value 
+                    , memName: inpName.value
+                    , memPoint: inpPoint.value
+                } 
+                memList.push(newMem);
+            }
+            inpId.value = ''; inpName.value = ''; inpPass.value = ''; inpPoint.value = '';
+            removeAllchild(tbodyElm);
+            showList();
+        }
+
+
+        //3. 테이블에서 상세버튼을 클릭하면,  클릭한 행의 회원 정보를 form에 출력하고,
+        //   (1)저장버튼을 클릭하면, 입력한 회원정보를 memList에서 변경하고,
+        //      memList에 존재하는 회원목록을 table(의 tbody)에 출력
+        var editBtns = document.getElementsByClassName('editBtn');
+        tbodyElm.onclick = function (e) {
+            if(e.target.className === 'editBtn') {
+                console.log('editBtns clicked....!');
+                console.log(e.target);
+                console.log('data속성값 : '+e.target.getAttribute('data-memid')); 
+                var dataId = e.target.getAttribute('data-memid');
+                // for(var i = 0; i < memList.length; i ++) {
+                //     if(memList[i].memId === dataId) { 
+                //         console.log('이름은 : ' + memList[i].memName);
+                //         inpId.setAttribute('value', memList[i].memId); 
+                //         inpName.setAttribute('value', memList[i].memName); 
+                //         inpPass.setAttribute('value', memList[i].memPass); 
+                //         inpPoint.setAttribute('value', memList[i].memPoint);  
+                //     };
+                // }
+                //람다식으로..!
+                memList.forEach(elm => {
+                    if(elm.memId === dataId) { 
+                        console.log('이름은 : ' + elm.memName);
+                        inpId.value = elm.memId;
+                        inpName.value = elm.memName;
+                        inpPass.value = elm.memPass;
+                        inpPoint.value = elm.memPoint;
+                        //setAttribute로 상세조회 값을 저장하면, 정보 수정 후 다른 회원 정보가 반영이 안 된다.. 왜..?
+                        //inpId.setAttribute('value', elm.memId); 
+                        //inpName.setAttribute('value', elm.memName); 
+                        //inpPass.setAttribute('value', elm.memPass); 
+                        //inpPoint.setAttribute('value', elm.memPoint);  
+                    };
+                });
+
+            }
+        }
+
+        //   (2)삭제버튼을 클릭하면, 해당 회원정보를 memList에서 삭제하고,
+        //      memList에 존재하는 회원목록을 table(의 tbody)에 출력
+        var delBtn = document.getElementById('delBtn');
+        
+        delBtn.onclick = function (e) {
+            console.log('del 버튼 클릭!')
+            console.log('e.target : ' + e.target);
+            console.log('e.target id : ' + e.target.id);
+            console.log('input id :' + inpId.value);
+
+            var index = memList.findIndex(i => i.memId === inpId.value);
+            console.log(index);
+            memList.splice(index, 1);
+            inpId.value = ''; inpName.value = ''; inpPass.value = ''; inpPoint.value = '';
+            removeAllchild(tbodyElm);
+            showList();
+        }
+
+        //초기화 버튼 
+        var resetBtn = document.getElementById('resetBtn');
+        resetBtn.onclick = function () {
+            inpId.value = ''; inpName.value = ''; inpPass.value = ''; inpPoint.value = '';
+        }
     </script>
 </body>
 </html>
