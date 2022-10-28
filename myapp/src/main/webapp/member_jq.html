@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원관리</title>
+    <script src="js/jquery-3.6.0.js"></script>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>아이디</th><th>이름</th><th>액션</th>
+            </tr>
+        </thead>
+        <tbody id="memTable">
+            <tr>
+                <td>a001</td><td>고길동</td><td><button type="button" class="editBtn">상세보기</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <form id="memForm">
+        아이디 : <input type="text" id="memId" name="memId" /><br/>
+        비밀번호 : <input type="password" id="memPass" name="memPass" /><br/>
+        이름 : <input type="text" id="memName" name="memName"/><br/>
+        포인트 : <input type="number" id="memPoint" name="memPoint"/><br/>
+        <input type="button" value="저장" id="saveBtn"/> 
+        <input type="button" value="삭제" id="delBtn"/> 
+        <input type="button" value="초기화" id="resetBtn"/> 
+    </form>
+    <!-- 문서에서 반복적으로 사용할 엘리먼트를 template 엘리먼트의 내용으로 저장 -->
+    <!-- template 엘리먼트는 화면에 출력되지 않으며, content 속성값으로 내용 엘리먼트 객체를 사용 가능 -->
+    <!-- 화면에 추가해야 될 요소를 template 태그 안에 넣음 -->
+    <template id="trTemp">
+        <tr>
+            <td class="memId"></td><td class="memName"></td><td><button type="button" class="editBtn">상세보기</button></td>
+        </tr>
+
+    </template>
+
+    <script>
+        //memList는 안에 회원정보가 여러개 들어있는 배열이다.
+        var memList = [
+            //각 객체에 한명의 회원정보를 담는다.
+            { memId: 'a001', memPass: '1234', memName: '고길동', memPoint: 80 } 
+            ,{ memId: 'a002', memPass: '5678', memName: '보노보노', memPoint: 95 } 
+            ,{ memId: 'a003', memPass: '2345', memName: '포로리', memPoint: 90 } 
+        ];
+        //1. memList에 존재하는 회원목록을 table(의 tbody)에 출력
+        //2. form에 회원정보를 입력하고 저장버튼을 클릭하면, 입력한 회원정보를 memList에 추가하고,
+        //   memList에 존재하는 회원목록을 table(의 tbody)에 출력
+        //3. 테이블에서 상세버튼을 클릭하면,
+        //   클릭한 행의 회원 정보를 form에 출력하고,
+        //   (1)저장버튼을 클릭하면, 입력한 회원정보를 memList에서 변경하고,
+        //      memList에 존재하는 회원목록을 table(의 tbody)에 출력
+        //   (2)삭제버튼을 클릭하면, 해당 회원정보를 memList에서 삭제하고,
+        //      memList에 존재하는 회원목록을 table(의 tbody)에 출력
+
+        //1. memList에 존재하는 회원목록을 table(의 tbody)에 출력
+        var tbodyElm = $('#memTable');
+
+
+        showList();
+    function showList() {
+        tbodyElm.html(''); //tbodyElm.empty(); 기존 <tbody>의 내용을 삭제 (내용 초기화)
+        memList.forEach(elm => {
+            // newTr.appendChild( elm[memId] );
+            console.log(elm);
+            console.log(elm.memId, elm.memName);
+            
+            //회원목록에서 회원객체를 하나씩 꺼내서
+            //회원 1명 정보를 하나의 <tr>로 생성
+            // var newTr = $('<tr>'); 
+            // $('<td>').text(elm.memId).appendTo(newTr);  // newTr.append( $('<td>').text(elm.memId) );
+            // $('<td>').text(elm.memName).appendTo(newTr);
+            // //var btn = $('<button>').attr('type', 'button').addClass('editBtn').attr('data-id', elm.memId).text('상세보기');
+            // var btn = $('<button>').attr({'type': 'button', 'data-id': elm.memId}).addClass('editBtn').text('상세보기');
+            // $('<td>').append(btn).appendTo(newTr); //<td>의 자식에 btn을 집어넣은 뒤 그거를 newTr의 자식으로 집어넣음.
+            // tbodyElm.append(newTr);
+            
+            
+            var tr = $('#trTemp').prop('content'); //$('#trTemp')[0].content  //<template>엘리먼트의 자식인 <tr>엘리먼트
+            var newTr = $(tr).clone(); //<tr>엘리먼트의 사본 생성
+            //newTr.find('td.memId') === $('td.memId', newTr)
+            $('td.memId', newTr).text(elm.memId); 
+            $('td.memName', newTr).text(elm.memName);
+            $('.editBtn', newTr).attr('data-id', elm.memId);
+            tbodyElm.append(newTr); // <tr>사본을 <tbody>에 자식으로 추가 // element 객체를 추가 
+        });
+    }
+    
+        //2. form에 회원정보를 입력하고 저장버튼을 클릭하면, 입력한 회원정보를 memList에 추가하고,
+        //   memList에 존재하는 회원목록을 table(의 tbody)에 출력
+        var editMode = false; //폼(memForm)이 회원정보를 변경하는 상태인지를 표시하는 변수 
+        var idInp = $('[name="memId"]');
+        var passInp = $('[name="memPass"]');
+        var nameInp = $('[name="memName"]');
+        var pointInp = $('[name="memPoint"]');
+        $('#saveBtn').on('click', function () {
+            if(editMode) {  //변경하는 경우
+                for (var i = 0; i < memList.length; i++) {
+                    var vo = memList[i];
+                    if(vo.memId === idInp.val()) {
+                        vo.memPass = passInp.val();
+                        vo.memName = nameInp.val();
+                        vo.memPoint = pointInp.val();
+                        break; //값을 찾았으면 더이상 for문을 돌 이유가 없으므로 break;하는 게 효율적 
+                    }
+                }
+            }else{  //추가하는 경우
+                var vo = { memId: idInp.val(), memPass: passInp.val(), memName: nameInp.val(), memPoint: pointInp.val() };
+                memList.push(vo);
+            }
+            
+            showList();
+            initForm();
+        });
+
+
+        function initForm() {
+            //idInp.val(''); passInp.val(''); nameInp.val(''); pointInp.val(''); 
+            // $('#memForm input[name]').val(''); //#memForm안의 input을 다 찾아서 val를 ''로 설정
+            $('#memForm')[0].reset(); //$('#memForm').get(0).reset();  //리셋버튼 누른 것과 동일한 효과
+            editMode = false; //추가할 수 있게끔 다시 기본 상태로 돌려놓는다. 폼의 입력 모드를 추가모드로. 
+            idInp.prop( 'readOnly', false);
+        }
+
+
+        //3. 테이블에서 상세버튼을 클릭하면,  클릭한 행의 회원 정보를 form에 출력하고,
+        //   (1)저장버튼을 클릭하면, 입력한 회원정보를 memList에서 변경하고,
+        //      memList에 존재하는 회원목록을 table(의 tbody)에 출력
+        $(tbodyElm).on('click', '.editBtn', function(ev){ //<tbody> 또는 그 내부 엘리먼트를 클릭한 경우 실행되는 함수
+        
+            // ev.target : 실제 이벤트가 (최초로) 발생한 엘리먼트 
+                //클릭한 엘리먼트의 조상 중 가장 가까운 <tr> 엘리먼트의 자손들 중 memId 클래스를 가진 <td>엘리먼트의 내용
+                // var mid = ev.target.closest('tr').querySelector('td.memId').textContent;
+                var mid = $(ev.target).attr('data-id');  
+                for (var i = 0; i < memList.length; i++) {
+                    var vo = memList[i];
+                    if(vo.memId === mid) {
+                        idInp.val(vo.memId);
+                        passInp.val(vo.memPass);
+                        nameInp.val(vo.memName);
+                        pointInp.val(vo.memPoint);
+                        editMode = true;
+                        idInp.prop('readOnly', true);  //회원아이디는 변경 불가 
+                        break;
+                    }
+                    
+                }
+        });
+
+        //   (2)삭제버튼을 클릭하면, 해당 회원정보를 memList에서 삭제하고,
+        //      memList에 존재하는 회원목록을 table(의 tbody)에 출력
+        $('#delBtn').on('click', function(){
+            for (var i = 0; i < memList.length; i++) {
+                var vo = memList[i];
+                if(vo.memId === idInp.val()) {
+                        //자바스크립트 배열에는 remove가 없음
+                        memList.splice(i,1);  //memList 배열의 i번 요소부터 1개를 삭제
+                        break; //값을 찾았으면 더이상 for문을 돌 이유가 없으므로 break;하는 게 효율적 
+                }
+            }
+            showList();
+            initForm();
+        });
+        
+        $('#resetBtn').on('click', function () {
+            initForm();
+        });
+
+        //이벤트 발생시 실행될 함수를 설정하는 명령어
+        // $('선택자').on('이벤트명', 함수);
+        // $('선택자').on('이벤트명', '선택자2', 함수);
+        // $('선택자').이벤트명(함수); //자주 사용하는 몇가지 이벤트들에 대해서 단축메서드 제공
+        // 이벤트를 발생시키는 명령어
+        // $('선택자').trigger('이벤트명');
+        // $('선택자').이벤트명(); //자주 사용하는 몇가지 이벤트들에 대해서 단축메서드 제공 
+
+        
+
+
+
+
+
+
+
+        //초기화 버튼 
+        // var resetBtn = document.getElementById('resetBtn');
+        // resetBtn.onclick = function () {
+        //     inpId.value = ''; inpName.value = ''; inpPass.value = ''; inpPoint.value = '';
+        // }
+
+    </script>
+</body>
+</html>
